@@ -1,19 +1,14 @@
 package com.mygdx.game.renderer;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.model.Man;
+import com.mygdx.game.model.mans.Man;
 import com.mygdx.game.model.MyWorld;
 import com.mygdx.game.model.blocks.Block;
 import com.mygdx.game.model.signs.Sign;
 
 public class WorldRenderer {
-    public static float CAMERA_WIDTH = 1200f;
-    public static  float CAMERA_HEIGHT = 800f;
 
     private MyWorld world;
     public OrthographicCamera cam;

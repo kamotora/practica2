@@ -20,7 +20,7 @@ public class InputHandler {
     }
 
     public static boolean keyF2() {
-        return Gdx.input.isKeyPressed(Input.Keys.F2);
+        return Gdx.input.isKeyPressed(Input.Keys.ENTER);
     }
 
 }
