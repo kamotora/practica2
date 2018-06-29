@@ -36,6 +36,9 @@ public class MyWorld {
      */
     TypeWorld typeWorld = TypeWorld.LIVE;
 
+    int countDead = 0;
+    int countLive = 0;
+    int countSave = 0;
     public MyWorld(){
         controller = new Controller(this);
         //read();
@@ -97,8 +100,10 @@ public class MyWorld {
          * Пока людей нет, ждем нажатие Entera
          */
         if(mans.size == 0) {
-            if (InputHandler.keyF2())
+            if (InputHandler.key()) {
                 createMans();
+                countLive = mans.size;
+            }
             else
                 return;
         }
@@ -111,8 +116,13 @@ public class MyWorld {
          */
         for(Man man: mans) {
             man.update();
+            countDead = countSave = 0;
+            if(man.isDead())
+                countDead++;
+            if(man.isSave())
+                countSave++;
         }
-
+        countLive = mans.size -(countDead+countSave);
         //создаём однажды огонь по клику
         if(InputHandler.isClicked())
             createFire();
@@ -125,11 +135,11 @@ public class MyWorld {
      * Создаём огонь
      */
     public void createFire(){
-        if(!controller.isFire()) {
+        if(!Controller.isFire()) {
             Sign fair = new Sign(InputHandler.getMousePosition(), TypeSign.Fire);
             fireController = new FireController(fair, this);
             signs.add(fair);
-            controller.setIsFire();
+            Controller.setIsFire();
         }
     }
 
@@ -140,4 +150,19 @@ public class MyWorld {
     public void setTypeWorld(TypeWorld typeWorld) {
         this.typeWorld = typeWorld;
     }
+
+    public int getCountDead() {
+        return countDead;
+    }
+
+
+    public  int getCountLive() {
+        return countLive;
+    }
+
+
+    public  int getCountSave() {
+        return countSave;
+    }
+
 }

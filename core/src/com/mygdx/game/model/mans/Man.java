@@ -20,54 +20,54 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.Random;
 
 public class Man {
-    final static int SIZE_ON_MAP = 32;
-    final static int MIN_SPEED = 2;
-    final static int MIN_VISION = 100;
+    private final static int SIZE_ON_MAP = 32;
+    private final static int MIN_SPEED = 2;
+    private final static int MIN_VISION = 100;
 
     /*
      * Место на карте
      */
-    Vector2 position = new Vector2();
+    private Vector2 position;
     /*
      * Направление движения
      */
-    Vector2 velocity = new Vector2(0,-1);
+    private Vector2 velocity = new Vector2(0,-1);
     /*
      * Картинка человека
      */
-    Texture image = new Texture("Man.png");
+    private Texture image = new Texture("Man.png");
     /*
      * Остаток здоровья
      */
-    int health = 100;
+    private int health = 100;
     /*
      * Радиус видимости
      */
-    int vision = MIN_VISION;
+    private int vision = MIN_VISION;
     /*
      * Есть огнетушитель
      */
-    boolean haveAntiFire = false;
+    private boolean haveAntiFire = false;
     /*
      * Знает о пожаре
      */
-    boolean isKnow = false;
+    private boolean isKnow = false;
     /*
      * жив, мертв, спасен
      */
-    TypeMan type;
+    private TypeMan type;
     /**
      * Кол-во потушенных огоньков
      */
-    int countDeadFire = 0;
+    private int countDeadFire = 0;
     /*
      * Скорость
      */
-    static int speed = MIN_SPEED;
+    private static int speed = MIN_SPEED;
     /*
      * Границы
      */
-    Rectangle bounds;
+    private Rectangle bounds;
 
     public Man(Vector2 position){
         this.position = position;
@@ -124,7 +124,7 @@ public class Man {
     }
 
     //Если умерли
-    public boolean isDead(){ return type == TypeMan.DEAD ? true: false; }
+    public boolean isDead(){ return type == TypeMan.DEAD; }
 
     public static int getSize() {
         return SIZE_ON_MAP - 10;
@@ -154,9 +154,7 @@ public class Man {
     /*
      * Спасён?
      */
-    public boolean isSave() {
-        return (type == TypeMan.SAVE) ? true : false;
-    }
+    public boolean isSave() { return type == TypeMan.SAVE; }
     /*
      * Узнал о пожаре
      */
@@ -206,5 +204,17 @@ public class Man {
         draw(WorldRenderer.getSpriteBatch());
         WorldRenderer.getSpriteBatch().end();
         */
+    }
+
+    public StringBuilder toStringBuilder(){
+        return  new StringBuilder("Уровень здоровья = " + health)
+                .append("\nОбласть видимости = ")
+                .append(vision)
+                .append("\nОгнетушитель: ")
+                .append( haveAntiFire ? "Да": "Нет")
+                .append("\nКол-во потушенного огня: ")
+                .append(countDeadFire)
+                .append("\nЗнает о пожаре: ")
+                .append(isKnow ? "Да": "Нет");
     }
 }

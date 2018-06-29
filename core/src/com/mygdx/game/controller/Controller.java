@@ -1,6 +1,7 @@
 package com.mygdx.game.controller;
 
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.InputHandler;
 import com.mygdx.game.model.mans.Man;
 import com.mygdx.game.model.MyWorld;
 import com.mygdx.game.model.blocks.Block;
@@ -16,6 +17,7 @@ public class Controller {
     Array<Sign> signs;
     static boolean isFire;
     boolean isTouchAlarm = false;
+    static String msg = new String("Кликните на человека,\nчтобы узнать ин-фу о нём");
     public Controller(MyWorld world){
         this.world = world;
         mans = world.getMans();
@@ -34,6 +36,8 @@ public class Controller {
             Array<Man> dead = new Array<Man>();
             Array<Man> saved = new Array<Man>();
             for (Man man: mans) {
+                //Хотят ли узнать про него
+                updateMsg(man);
                 //если умер или спасён, ничего делать не надо
                 if (man.isDead())
                     continue;
@@ -42,6 +46,7 @@ public class Controller {
                     man.setKnow();
                 checkWithBlock(man);
                 checkWithSigns(man);
+                checkBoundsOfScreen(man);
                 if (man.isDead())
                     dead.add(man);
                 if(man.isSave())
@@ -49,8 +54,6 @@ public class Controller {
             }
             for (Man man: dead)
                 man.dead();
-            for (Man man: saved)
-                man.save();
         }
     }
 
@@ -143,9 +146,29 @@ public class Controller {
         for(Sign sign : needChange)
             sign.change();
     }
+    /*
+    * Если чел вышел за экран, он спасся
+    */
+    public void checkBoundsOfScreen(Man man){
+        if(man.getCenterPosition().x < 0
+                || man.getCenterPosition().y < 0
+                || man.getCenterPosition().x > MyWorld.WIDTH
+                || man.getCenterPosition().y > MyWorld.HEIGHT){
+            man.save();
+        }
+    }
+    public void updateMsg (Man man){
+        if(InputHandler.isClicked() && man.getBounds().contains(InputHandler.getMousePosition()))
+            msg = man.toStringBuilder().toString();
+    }
+
 
     public static boolean isFire() {
         return isFire;
+    }
+
+    public static String getMsg() {
+        return msg;
     }
 
     public static void setIsFire(){

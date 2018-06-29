@@ -1,8 +1,12 @@
 package com.mygdx.game.renderer;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.mygdx.game.InputHandler;
+import com.mygdx.game.controller.Controller;
 import com.mygdx.game.model.mans.Man;
 import com.mygdx.game.model.MyWorld;
 import com.mygdx.game.model.blocks.Block;
@@ -11,10 +15,10 @@ import com.mygdx.game.model.signs.Sign;
 public class WorldRenderer {
 
     private MyWorld world;
-    public OrthographicCamera cam;
-    static ShapeRenderer renderer = new ShapeRenderer();
-    static SpriteBatch spriteBatch = new SpriteBatch();
-
+    OrthographicCamera cam;
+    private static ShapeRenderer renderer = new ShapeRenderer();
+    private static SpriteBatch spriteBatch = new SpriteBatch();
+    private static BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal("font.fnt"), Gdx.files.internal("font.png"),false);
     //установка камеры
     public void SetCamera(float x, float y){
         this.cam.position.set(x, y,0);
@@ -29,8 +33,18 @@ public class WorldRenderer {
     public void render() {
         world.update();
         drawBlocks();
+        spriteBatch.begin();
         drawSigns();
         drawMans();
+        updateLabels();
+        spriteBatch.end();
+    }
+
+    private void updateLabels() {
+        bitmapFont.draw(spriteBatch,"Живых людей: "+world.getCountLive(), 20,30);
+        bitmapFont.draw(spriteBatch,"Мертвых людей: "+world.getCountDead(), 200,30);
+        bitmapFont.draw(spriteBatch,"Людей спаслось: "+world.getCountSave(), 400,30);
+        bitmapFont.draw(spriteBatch, Controller.getMsg(),1200,600);
     }
 
     //отрисовка кирпичей
@@ -44,20 +58,16 @@ public class WorldRenderer {
 
         renderer.end();
     }
-    void drawSigns(){
-        spriteBatch.begin();
+    private void drawSigns(){
         for(Sign sign : world.getSigns()){
             sign.draw(spriteBatch);
         }
-        spriteBatch.end();
     }
     //отрисовка персонажа по аналогии
     private void drawMans() {
-        spriteBatch.begin();
         for(Man man : world.getMans()){
             man.draw(spriteBatch);
         }
-        spriteBatch.end();
     }
 
     public static SpriteBatch getSpriteBatch() {
