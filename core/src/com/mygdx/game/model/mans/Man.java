@@ -196,13 +196,13 @@ public class Man {
     public void save() {
         type = TypeMan.SAVE;
         //Добавить изображение
-        /*
-        image = new Texture("save.png");
-        velocity.set(0,0);
+        image = TextureStorage.getTexture("saved");
+        //Добавлять или нет?
+        //velocity.set(0,0);
         WorldRenderer.getSpriteBatch().begin();
         draw(WorldRenderer.getSpriteBatch());
         WorldRenderer.getSpriteBatch().end();
-        */
+
     }
 
     public StringBuilder toStringBuilder(){

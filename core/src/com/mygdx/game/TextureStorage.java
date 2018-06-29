@@ -22,6 +22,7 @@ public class TextureStorage {
         array.add(new Pair<Texture, String>(new Texture(Gdx.files.internal("PressAlarmButton.png")), "PressAlarmButton"));
         array.add(new Pair<Texture, String>(new Texture(Gdx.files.internal("PressAntiFire.png")), "PressAntiFire"));
         array.add(new Pair<Texture, String>(new Texture(Gdx.files.internal("Smoke.png")), "Smoke"));
+        array.add(new Pair<Texture, String>(new Texture(Gdx.files.internal("saved.png")), "saved"));
     }
     public static Texture getTexture(String name){
         //Если ещё не создали массив, создаём

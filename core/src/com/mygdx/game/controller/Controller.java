@@ -113,7 +113,6 @@ public class Controller {
     }
 
     public void checkWithSigns(Man man){
-        Array<Sign> needChange = new Array<Sign>();
         for(Sign sign : signs){
             if(man.getCenterPosition().sub(sign.getPosition()).len() < Man.getSize()*2){
                 if (sign.getType() == TypeSign.AntiFire && !sign.isUsed() && man.isKnow()) {
@@ -121,7 +120,7 @@ public class Controller {
                     sign.setUsed();
                 }
                 if(sign.getType() == TypeSign.Fire && man.isAntiFire()) {
-                    needChange.add(sign);
+                    sign.setUsed();
                     man.setCountDeadFire();
                 }
                 //Нажимаем на кнопку, если возможно
@@ -146,9 +145,6 @@ public class Controller {
                     man.setKnow();
             }
         }
-        //Если нужно изменить знак
-        for(Sign sign : needChange)
-            sign.change();
     }
     /*
     * Если чел вышел за экран, он спасся

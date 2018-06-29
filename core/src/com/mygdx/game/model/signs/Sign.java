@@ -40,30 +40,23 @@ public class Sign{
         spriteBatch.draw(image,position.x, position.y, SIZE_ON_MAP,SIZE_ON_MAP);
     }
 
+    //Меняет текстуру, помечаем, если надо
     public void setUsed() {
         if(!isUsed && (type == TypeSign.AlarmButton || type == TypeSign.AntiFire)){
             isUsed = true;
-            image = TextureStorage.getTexture("Press"+type.name() + ".png");
-            WorldRenderer.getSpriteBatch().begin();
-            draw(WorldRenderer.getSpriteBatch());
-            WorldRenderer.getSpriteBatch().end();
+            image = TextureStorage.getTexture("Press"+type.name());
         }
+        if(type == TypeSign.Fire)
+            image = TextureStorage.getTexture(type.name());
+        WorldRenderer.getSpriteBatch().begin();
+        draw(WorldRenderer.getSpriteBatch());
+        WorldRenderer.getSpriteBatch().end();
     }
 
     public boolean isUsed() {
         return isUsed;
     }
 
-    //меняем текстуру
-    public void change() {
-        if(type != TypeSign.Fire)
-            return;
-        type = TypeSign.Smoke;
-        image = TextureStorage.getTexture(type.name());
-        WorldRenderer.getSpriteBatch().begin();
-        draw(WorldRenderer.getSpriteBatch());
-        WorldRenderer.getSpriteBatch().end();
-    }
 
     public Rectangle getFigure() {
         return figure;
