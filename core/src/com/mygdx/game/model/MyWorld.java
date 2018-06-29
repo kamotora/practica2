@@ -114,9 +114,9 @@ public class MyWorld {
         /*
          * Обновление местоположения людей
          */
+        countDead = countSave = 0;
         for(Man man: mans) {
             man.update();
-            countDead = countSave = 0;
             if(man.isDead())
                 countDead++;
             if(man.isSave())
@@ -135,11 +135,11 @@ public class MyWorld {
      * Создаём огонь
      */
     public void createFire(){
-        if(!Controller.isFire()) {
+        if(typeWorld == TypeWorld.LIVE) {
             Sign fair = new Sign(InputHandler.getMousePosition(), TypeSign.Fire);
             fireController = new FireController(fair, this);
             signs.add(fair);
-            Controller.setIsFire();
+            typeWorld = TypeWorld.FIRE;
         }
     }
 
@@ -154,7 +154,6 @@ public class MyWorld {
     public int getCountDead() {
         return countDead;
     }
-
 
     public  int getCountLive() {
         return countLive;

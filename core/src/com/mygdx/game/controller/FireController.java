@@ -1,15 +1,12 @@
 package com.mygdx.game.controller;
 
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.model.MyWorld;
-import com.mygdx.game.model.TypeWorld;
 import com.mygdx.game.model.signs.Sign;
 import com.mygdx.game.model.signs.TypeSign;
 import com.badlogic.gdx.math.Vector2;
 
 
 public class FireController {
-    int countAddFire;
     int countLinesFire;
     final static int DELAY = 15000;
     long times;
@@ -20,7 +17,6 @@ public class FireController {
         this.startFire = new Vector2(fire.getPosition());
         startFire.y += 32;
         startFire.x -= 32;
-        countAddFire = 0;
         countLinesFire = 1;
         this.world = world;
         times = System.currentTimeMillis();
@@ -30,16 +26,18 @@ public class FireController {
 
     //Нужно сделать: если есть потушенные огоньки, распростанение уменьшается
     public void spreadFire(){
-        if(world.getTypeWorld() == TypeWorld.WIN)
-            return;
         if(System.currentTimeMillis() - times < DELAY)
             return;
         if(fire.getType() == TypeSign.Smoke) {
-            world.setTypeWorld(TypeWorld.WIN);
-            System.out.println(world.getTypeWorld().name());
+            return;
         }
+
+        //Если есть потушенные огоньки, уменьшаем распространение пожара
+        for(Sign sign : world.getSigns())
+            if(sign.getType() == TypeSign.Smoke)
+                countLinesFire--;
+
         times = System.currentTimeMillis();
-        countAddFire += 8;
         countLinesFire += 2;
         /*
         * Заполнили верхнюю и нижнюю линии над огоньком

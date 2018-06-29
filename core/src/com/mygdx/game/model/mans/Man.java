@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.InputHandler;
+import com.mygdx.game.TextureStorage;
 import com.mygdx.game.controller.Controller;
 import com.mygdx.game.model.MyWorld;
 import com.mygdx.game.model.blocks.Block;
@@ -35,7 +36,7 @@ public class Man {
     /*
      * Картинка человека
      */
-    private Texture image = new Texture("Man.png");
+    private Texture image = TextureStorage.getTexture("Man");
     /*
      * Остаток здоровья
      */
@@ -133,7 +134,6 @@ public class Man {
      * Есть ли огнетушитель
      */
     public boolean isAntiFire() {
-        System.out.println(haveAntiFire);
         return haveAntiFire;
     }
     /*
@@ -175,7 +175,7 @@ public class Man {
     //меняем текстуру,если сдох
     public void dead() {
         type = TypeMan.DEAD;
-        image = new Texture("dead.png");
+        image = TextureStorage.getTexture("dead.png");
         velocity.set(0,0);
         WorldRenderer.getSpriteBatch().begin();
         draw(WorldRenderer.getSpriteBatch());
@@ -195,7 +195,6 @@ public class Man {
      */
     public void save() {
         type = TypeMan.SAVE;
-
         //Добавить изображение
         /*
         image = new Texture("save.png");
@@ -216,5 +215,9 @@ public class Man {
                 .append(countDeadFire)
                 .append("\nЗнает о пожаре: ")
                 .append(isKnow ? "Да": "Нет");
+    }
+
+    public TypeMan getType() {
+        return type;
     }
 }

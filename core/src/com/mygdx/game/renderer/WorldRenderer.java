@@ -44,7 +44,8 @@ public class WorldRenderer {
         bitmapFont.draw(spriteBatch,"Живых людей: "+world.getCountLive(), 20,30);
         bitmapFont.draw(spriteBatch,"Мертвых людей: "+world.getCountDead(), 200,30);
         bitmapFont.draw(spriteBatch,"Людей спаслось: "+world.getCountSave(), 400,30);
-        bitmapFont.draw(spriteBatch, Controller.getMsg(),1200,600);
+        bitmapFont.draw(spriteBatch, Controller.getManMsg(),1200,600);
+        bitmapFont.draw(spriteBatch,world.getTypeWorld().toString(), 50,50);
     }
 
     //отрисовка кирпичей

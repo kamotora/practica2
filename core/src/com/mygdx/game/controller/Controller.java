@@ -2,12 +2,15 @@ package com.mygdx.game.controller;
 
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.InputHandler;
+import com.mygdx.game.model.TypeWorld;
 import com.mygdx.game.model.mans.Man;
 import com.mygdx.game.model.MyWorld;
 import com.mygdx.game.model.blocks.Block;
 import com.mygdx.game.model.blocks.TypeBlock;
+import com.mygdx.game.model.mans.TypeMan;
 import com.mygdx.game.model.signs.Sign;
 import com.mygdx.game.model.signs.TypeSign;
+import com.sun.deploy.security.ValidationState;
 
 
 public class Controller {
@@ -15,7 +18,6 @@ public class Controller {
     Array<Man> mans;
     Array<Block> blocks;
     Array<Sign> signs;
-    static boolean isFire;
     boolean isTouchAlarm = false;
     static String msg = new String("Кликните на человека,\nчтобы узнать ин-фу о нём");
     public Controller(MyWorld world){
@@ -28,7 +30,7 @@ public class Controller {
     //Совершаем действия
     public void check(){
         //Если не начался пожар
-        if(!isFire) {
+        if(world.getTypeWorld() != TypeWorld.FIRE) {
             for (Man man: mans)
                 checkWithBlock(man);
         }
@@ -37,7 +39,7 @@ public class Controller {
             Array<Man> saved = new Array<Man>();
             for (Man man: mans) {
                 //Хотят ли узнать про него
-                updateMsg(man);
+                updateManMsg(man);
                 //если умер или спасён, ничего делать не надо
                 if (man.isDead())
                     continue;
@@ -55,6 +57,9 @@ public class Controller {
             for (Man man: dead)
                 man.dead();
         }
+
+        //Узнаем, как дела
+        checkWorld();
     }
 
     //обработка событий с блоком
@@ -113,6 +118,7 @@ public class Controller {
             if(man.getCenterPosition().sub(sign.getPosition()).len() < Man.getSize()*2){
                 if (sign.getType() == TypeSign.AntiFire && !sign.isUsed() && man.isKnow()) {
                     man.setAntiFire();
+                    sign.setUsed();
                 }
                 if(sign.getType() == TypeSign.Fire && man.isAntiFire()) {
                     needChange.add(sign);
@@ -125,18 +131,16 @@ public class Controller {
                 }
                 if (sign.getType() == TypeSign.Fire || sign.getType() == TypeSign.Smoke)
                     man.setHealth(sign.getType());
-                else
-                    sign.setUsed();
+                if(sign.getType() == TypeSign.ExitSign && man.isKnow() && man.getBounds().overlaps(sign.getFigure()))
+                    man.save();
 
             }
 
             //Если находится в области видимости
             if(man.getCenterPosition().sub(sign.getPosition()).len() < man.getVision()){
                 //Если чел видит знак выхода и ещё не находится там
-                if(sign.getType() == TypeSign.ExitSign && man.isKnow() && !man.getBounds().overlaps(sign.getFigure())){
+                if(sign.getType() == TypeSign.ExitSign && man.isKnow() && !man.getBounds().overlaps(sign.getFigure()))
                     man.setVelocity(sign.getPosition().cpy().sub(man.getPosition()).nor());
-                    man.save();
-                }
                 //Если чел видит ононь, он узнал о пожаре
                 if(sign.getType() == TypeSign.Fire)
                     man.setKnow();
@@ -157,24 +161,57 @@ public class Controller {
             man.save();
         }
     }
-    public void updateMsg (Man man){
+
+    public void checkWorld(){
+        int dead = 0, save =0;
+        for(Man man:mans){
+            if(man.getType() == TypeMan.DEAD)
+                dead++;
+            if(man.getType() == TypeMan.SAVE)
+                save++;
+        }
+        boolean haveFire = false, haveSmoke = false;
+        for(Sign sign: signs){
+            if(sign.getType() == TypeSign.Fire){
+                haveFire = true;
+                break;
+            }
+            if(sign.getType() == TypeSign.Smoke)
+                haveSmoke = true;
+        }
+        if(dead == mans.size) {
+            world.setTypeWorld(TypeWorld.END);
+            return;
+        }
+        if(save == mans.size ){
+            if(!haveFire && haveSmoke)
+                world.setTypeWorld(TypeWorld.WIN);
+            else
+                world.setTypeWorld(TypeWorld.ALLSAVE);
+            return;
+        }
+        if((dead+save == mans.size) && (dead != 0) && (save != 0)){
+            world.setTypeWorld(TypeWorld.MAYBE);
+            return;
+        }
+        if(haveFire){
+            world.setTypeWorld(TypeWorld.FIRE);
+            return;
+        }
+
+    }
+
+    public void updateManMsg (Man man){
         if(InputHandler.isClicked() && man.getBounds().contains(InputHandler.getMousePosition()))
             msg = man.toStringBuilder().toString();
     }
 
 
-    public static boolean isFire() {
-        return isFire;
-    }
-
-    public static String getMsg() {
+    public static String getManMsg() {
         return msg;
     }
 
-    public static void setIsFire(){
-        if(!isFire)
-            isFire = true;
-    }
+
 
 }
 

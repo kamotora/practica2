@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.TextureStorage;
 import com.mygdx.game.renderer.WorldRenderer;
 
 
@@ -18,13 +19,9 @@ public class Sign{
     final static int SIZE_ON_MAP = 32;
     public Sign(Vector2 position, TypeSign type) {
         this.position = new Vector2(position);
-         image = new Texture(type.name() + ".png");
+         image = TextureStorage.getTexture(type.name());
          this.type = type;
          figure = new Rectangle(position.x,position.y,SIZE_ON_MAP,SIZE_ON_MAP);
-    }
-
-    public Texture getImage() {
-        return image;
     }
 
     public TypeSign getType() {
@@ -46,7 +43,7 @@ public class Sign{
     public void setUsed() {
         if(!isUsed && (type == TypeSign.AlarmButton || type == TypeSign.AntiFire)){
             isUsed = true;
-            image = new Texture("Press"+type.name() + ".png");
+            image = TextureStorage.getTexture("Press"+type.name() + ".png");
             WorldRenderer.getSpriteBatch().begin();
             draw(WorldRenderer.getSpriteBatch());
             WorldRenderer.getSpriteBatch().end();
@@ -62,7 +59,7 @@ public class Sign{
         if(type != TypeSign.Fire)
             return;
         type = TypeSign.Smoke;
-        image = new Texture(type.name() + ".png");
+        image = TextureStorage.getTexture(type.name());
         WorldRenderer.getSpriteBatch().begin();
         draw(WorldRenderer.getSpriteBatch());
         WorldRenderer.getSpriteBatch().end();
@@ -91,10 +88,12 @@ public class Sign{
             Vector2 vector = new Vector2();
             vector.fromString(str.substring(posStart,posFinish));
             TypeSign typeSign = TypeSign.fromString(str.substring(typeStart,typeFinish));
+            if (typeSign == null)
+                throw new Exception("typeSign null");
             return new Sign(vector,typeSign);
         }
         catch (Exception e){
-            System.out.println("sign error");
+            System.out.println("sign error "+e);
         }
         return null;
     }
