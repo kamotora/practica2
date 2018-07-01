@@ -31,7 +31,7 @@ public class WorldRenderer {
 
     //основной метод, здесь мы отрисовываем все объекты мира
     public void render() {
-        world.update();
+        //world.update();
         drawBlocks();
         spriteBatch.begin();
         drawSigns();
@@ -41,11 +41,11 @@ public class WorldRenderer {
     }
 
     private void updateLabels() {
-        bitmapFont.draw(spriteBatch,"Живых людей: "+world.getCountLive(), 20,30);
-        bitmapFont.draw(spriteBatch,"Мертвых людей: "+world.getCountDead(), 200,30);
-        bitmapFont.draw(spriteBatch,"Людей спаслось: "+world.getCountSave(), 400,30);
-        bitmapFont.draw(spriteBatch, Controller.getManMsg(),1200,600);
-        bitmapFont.draw(spriteBatch,world.getTypeWorld().toString(), 50,50);
+        bitmapFont.draw(spriteBatch,"Живых людей: "+world.getCountLive(), 1000,700);
+        bitmapFont.draw(spriteBatch,"Мертвых людей: "+world.getCountDead(), 1000,650);
+        bitmapFont.draw(spriteBatch,"Людей спаслось: "+world.getCountSave(), 1000,600);
+        bitmapFont.draw(spriteBatch, Controller.getManMsg(),1000,500);
+        bitmapFont.draw(spriteBatch,world.getTypeWorld().toString(), 1000,800);
     }
 
     //отрисовка кирпичей
@@ -73,5 +73,8 @@ public class WorldRenderer {
 
     public static SpriteBatch getSpriteBatch() {
         return spriteBatch;
+    }
+    public static ShapeRenderer getShapeRenderer() {
+        return renderer;
     }
 }

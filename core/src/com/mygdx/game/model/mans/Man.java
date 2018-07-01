@@ -1,20 +1,15 @@
 package com.mygdx.game.model.mans;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.InputHandler;
 import com.mygdx.game.TextureStorage;
-import com.mygdx.game.controller.Controller;
 import com.mygdx.game.model.MyWorld;
 import com.mygdx.game.model.blocks.Block;
 import com.mygdx.game.model.blocks.TypePosition;
 import com.mygdx.game.model.signs.TypeSign;
 import com.mygdx.game.renderer.WorldRenderer;
-import com.sun.javafx.geom.Vec2d;
-import javafx.scene.paint.Color;
-import com.mygdx.game.model.blocks.TypeBlock;
 import com.badlogic.gdx.math.Vector2;
 
 

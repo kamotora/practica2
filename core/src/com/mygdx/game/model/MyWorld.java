@@ -3,6 +3,7 @@ package com.mygdx.game.model;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.Creator;
 import com.mygdx.game.InputHandler;
 import com.mygdx.game.controller.Controller;
 import com.mygdx.game.controller.FireController;
@@ -18,8 +19,8 @@ public class MyWorld {
     /*
      * Размеры окна
      */
-    public static int WIDTH = 1500;
-    public static  int HEIGHT = 800;
+    public static int WIDTH = 1400;
+    public static  int HEIGHT = 1000;
 
     Array<Block> blocks = new Array<Block>();
     Array<Man> mans = new Array<Man>();
@@ -99,12 +100,11 @@ public class MyWorld {
         /*
          * Пока людей нет, ждем нажатие Entera
          */
-        if(mans.size == 0) {
-            if (InputHandler.key()) {
+        if (mans.size == 0) {
+            if (InputHandler.keyEnter()) {
                 createMans();
                 countLive = mans.size;
-            }
-            else
+            } else
                 return;
         }
         /*
@@ -112,7 +112,7 @@ public class MyWorld {
          */
         controller.check();
         /*
-         * Обновление местоположения людей
+         * Обновление кол-ва спасённых и умерших людей
          */
         countDead = countSave = 0;
         for(Man man: mans) {
@@ -122,7 +122,10 @@ public class MyWorld {
             if(man.isSave())
                 countSave++;
         }
-        countLive = mans.size -(countDead+countSave);
+        if (typeWorld == TypeWorld.WIN){
+            countSave = mans.size;
+        }
+        countLive = mans.size -countDead;
         //создаём однажды огонь по клику
         if(InputHandler.isClicked())
             createFire();
@@ -163,5 +166,10 @@ public class MyWorld {
     public  int getCountSave() {
         return countSave;
     }
-
+    public void destroy(){
+        blocks.clear();
+        mans.clear();
+        signs.clear();
+        fireController = null;
+    }
 }

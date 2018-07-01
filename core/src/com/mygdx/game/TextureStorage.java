@@ -34,9 +34,9 @@ public class TextureStorage {
             * Сначала просто сравниваем
             * Если не вышло, пробуем привести к одному регистру
             */
-            if(name.contains(obj.getValue()))
+            if(name.equals(obj.getValue()))
                 return obj.getKey();
-            else if(name.toLowerCase().contains(obj.getValue().toLowerCase()))
+            else if(name.toLowerCase().equals(obj.getValue().toLowerCase()))
                 return obj.getKey();
         //Если не найдено, пользователь напутал
         System.out.println("TextureStorage error");

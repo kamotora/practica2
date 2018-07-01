@@ -23,6 +23,7 @@ public class Block{
     Rectangle figure;
     public Block(Vector2 position, TypeBlock typeBlock, TypePosition typePosition, int length) {
         this.position = position;
+        position.y -= 50;
         this.typePosition = typePosition;
         this.typeBlock = typeBlock;
         //толщина

@@ -1,6 +1,5 @@
 package com.mygdx.game.model.signs;
 
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -46,8 +45,10 @@ public class Sign{
             isUsed = true;
             image = TextureStorage.getTexture("Press"+type.name());
         }
-        if(type == TypeSign.Fire)
+        if(type == TypeSign.Fire) {
+            type = TypeSign.Smoke;
             image = TextureStorage.getTexture(type.name());
+        }
         WorldRenderer.getSpriteBatch().begin();
         draw(WorldRenderer.getSpriteBatch());
         WorldRenderer.getSpriteBatch().end();

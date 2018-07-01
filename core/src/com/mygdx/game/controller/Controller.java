@@ -10,7 +10,6 @@ import com.mygdx.game.model.blocks.TypeBlock;
 import com.mygdx.game.model.mans.TypeMan;
 import com.mygdx.game.model.signs.Sign;
 import com.mygdx.game.model.signs.TypeSign;
-import com.sun.deploy.security.ValidationState;
 
 
 public class Controller {
@@ -31,8 +30,12 @@ public class Controller {
     public void check(){
         //Если не начался пожар
         if(world.getTypeWorld() != TypeWorld.FIRE) {
-            for (Man man: mans)
+            for (Man man: mans){
                 checkWithBlock(man);
+                //Хотят ли узнать про него
+                updateManMsg(man);
+            }
+
         }
         else {
             Array<Man> dead = new Array<Man>();
@@ -112,6 +115,9 @@ public class Controller {
         }
     }
 
+    /*
+    * Подкорректировать дальность огня
+    */
     public void checkWithSigns(Man man){
         for(Sign sign : signs){
             if(man.getCenterPosition().sub(sign.getPosition()).len() < Man.getSize()*2){
@@ -175,21 +181,45 @@ public class Controller {
             if(sign.getType() == TypeSign.Smoke)
                 haveSmoke = true;
         }
+        /*
+        * Все умерли
+        */
         if(dead == mans.size) {
             world.setTypeWorld(TypeWorld.END);
             return;
         }
+        /*
+         * Все спаслись
+         */
         if(save == mans.size ){
-            if(!haveFire && haveSmoke)
-                world.setTypeWorld(TypeWorld.WIN);
-            else
-                world.setTypeWorld(TypeWorld.ALLSAVE);
+            world.setTypeWorld(TypeWorld.WIN);
             return;
         }
+        /*
+         * Пожар ликвидирован
+         */
+        if(!haveFire && haveSmoke) {
+            /*
+             * Некоторые умерли, но потушили пожар
+             */
+            if(dead > 0)
+                world.setTypeWorld(TypeWorld.WINANDDEAD);
+            else
+                /*
+                 * Потушили пожар и выжили
+                 */
+                world.setTypeWorld(TypeWorld.WIN);
+        }
+        /*
+         * Людей в здании не осталось, часть умерла, часть спаслась
+         */
         if((dead+save == mans.size) && (dead != 0) && (save != 0)){
             world.setTypeWorld(TypeWorld.MAYBE);
             return;
         }
+        /*
+         * Пожар продолжается, есть люди в здинии
+         */
         if(haveFire){
             world.setTypeWorld(TypeWorld.FIRE);
             return;

@@ -1,6 +1,6 @@
 package com.mygdx.game.model;
 
-public enum  TypeWorld {END,LIVE, MAYBE,FIRE, WIN,ALLSAVE;
+public enum  TypeWorld {END,LIVE, MAYBE,FIRE, WIN, ALLSAVE, WINANDDEAD;
 
     @Override
     public String toString() {
@@ -17,6 +17,8 @@ public enum  TypeWorld {END,LIVE, MAYBE,FIRE, WIN,ALLSAVE;
             str = "Умерли, но не все. Неплохо";
         if(this == TypeWorld.ALLSAVE)
             str = "Все спаслись. Пожарная безопасность на высоте!";
+        if(this == TypeWorld.WINANDDEAD)
+            str = "Есть люди герои, которые ценой своей жизни ликвидировали пожар.";
         if(str == null)
             System.out.println("error TypeWorld");
         return str;

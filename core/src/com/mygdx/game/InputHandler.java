@@ -19,8 +19,14 @@ public class InputHandler {
         return new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
     }
 
-    public static boolean key() {
+    public static boolean keyEnter() {
         return Gdx.input.isKeyPressed(Input.Keys.ENTER);
+    }
+    public static boolean keySpace() {
+        return Gdx.input.isKeyPressed(Input.Keys.SPACE);
+    }
+    public static boolean key(int key) {
+        return Gdx.input.isKeyPressed(key);
     }
 
 }
