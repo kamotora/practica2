@@ -1,6 +1,6 @@
 package com.mygdx.game.controller;
 
-import com.mygdx.game.model.MyWorld;
+import com.mygdx.game.model.world.MyWorld;
 import com.mygdx.game.model.signs.Sign;
 import com.mygdx.game.model.signs.TypeSign;
 import com.badlogic.gdx.math.Vector2;
@@ -15,8 +15,8 @@ public class FireController {
     Sign fire;
     public FireController(Sign fire, MyWorld world) {
         this.startFire = new Vector2(fire.getPosition());
-        startFire.y += 32;
-        startFire.x -= 32;
+        startFire.y += Sign.getSizeOnMap();
+        startFire.x -= Sign.getSizeOnMap();
         countLinesFire = 1;
         this.world = world;
         times = System.currentTimeMillis();
@@ -34,8 +34,10 @@ public class FireController {
 
         //Если есть потушенные огоньки, уменьшаем распространение пожара
         for(Sign sign : world.getSigns())
-            if(sign.getType() == TypeSign.Smoke)
+            if(sign.getType() == TypeSign.Smoke && !sign.isUsed()){
                 countLinesFire--;
+                sign.setIsUsed();
+            }
 
         times = System.currentTimeMillis();
         countLinesFire += 2;

@@ -1,9 +1,8 @@
-package com.mygdx.game;
+package com.mygdx.game.hepler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.model.mans.Man;
 import javafx.util.Pair;
 
 /*
@@ -15,7 +14,7 @@ public class TextureStorage {
     TextureStorage(){
         array.add(new Pair<Texture, String>(new Texture(Gdx.files.internal("AlarmButton.png")), "AlarmButton"));
         array.add(new Pair<Texture, String>(new Texture(Gdx.files.internal("AntiFire.png")), "AntiFire"));
-        array.add(new Pair<Texture, String>(new Texture(Gdx.files.internal("dead.png")), "dead"));
+        array.add(new Pair<Texture, String>(new Texture(Gdx.files.internal("dead.png")), "kill"));
         array.add(new Pair<Texture, String>(new Texture(Gdx.files.internal("ExitSign.png")), "ExitSign"));
         array.add(new Pair<Texture, String>(new Texture(Gdx.files.internal("Fire.png")), "Fire"));
         array.add(new Pair<Texture, String>(new Texture(Gdx.files.internal("Man.png")), "Man"));

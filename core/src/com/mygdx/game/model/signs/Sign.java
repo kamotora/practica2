@@ -4,23 +4,26 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.TextureStorage;
+import com.mygdx.game.hepler.TextureStorage;
 import com.mygdx.game.renderer.WorldRenderer;
 
 
 public class Sign{
-    Vector2 position;
+    Vector2 position= new Vector2();
     Texture image;
     TypeSign type;
     Rectangle figure;
     boolean isUsed = false;
     final static int SIZE_ON_MAP = 32;
-    public Sign(Vector2 position, TypeSign type) {
-        this.position = new Vector2(position);
+    public Sign(Vector2 centerPosition, TypeSign type) {
+        this.position.set(centerPosition.x, centerPosition.y) ;
          image = TextureStorage.getTexture(type.name());
          this.type = type;
          figure = new Rectangle(position.x,position.y,SIZE_ON_MAP,SIZE_ON_MAP);
+    }
+
+    public static int getSizeOnMap() {
+        return SIZE_ON_MAP;
     }
 
     public TypeSign getType() {
@@ -30,10 +33,6 @@ public class Sign{
     public Vector2 getPosition() {
         return position;
     }
-    public Vector2 getCenterPosition(){
-        return new Vector2(position.x+SIZE_ON_MAP/2,position.y+SIZE_ON_MAP/2);
-    }
-
 
     public void draw(SpriteBatch spriteBatch){
         spriteBatch.draw(image,position.x, position.y, SIZE_ON_MAP,SIZE_ON_MAP);
@@ -53,6 +52,7 @@ public class Sign{
         draw(WorldRenderer.getSpriteBatch());
         WorldRenderer.getSpriteBatch().end();
     }
+    public void setIsUsed() { if(!isUsed) isUsed = true; }
 
     public boolean isUsed() {
         return isUsed;
@@ -78,17 +78,20 @@ public class Sign{
         int posFinish = str.indexOf("),", posStart)+1;
         int typeStart = str.indexOf("type=", 1) + 5;
         int typeFinish = str.indexOf('}', typeStart);
+        Sign sign = null;
         try{
             Vector2 vector = new Vector2();
             vector.fromString(str.substring(posStart,posFinish));
             TypeSign typeSign = TypeSign.fromString(str.substring(typeStart,typeFinish));
             if (typeSign == null)
                 throw new Exception("typeSign null");
-            return new Sign(vector,typeSign);
+            sign =  new Sign(vector,typeSign);
         }
         catch (Exception e){
             System.out.println("sign error "+e);
+            return null;
         }
-        return null;
+        return sign;
     }
+
 }

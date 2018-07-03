@@ -1,10 +1,10 @@
 package com.mygdx.game.controller;
 
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.InputHandler;
-import com.mygdx.game.model.TypeWorld;
+import com.mygdx.game.hepler.InputHandler;
+import com.mygdx.game.model.world.TypeWorld;
 import com.mygdx.game.model.mans.Man;
-import com.mygdx.game.model.MyWorld;
+import com.mygdx.game.model.world.MyWorld;
 import com.mygdx.game.model.blocks.Block;
 import com.mygdx.game.model.blocks.TypeBlock;
 import com.mygdx.game.model.mans.TypeMan;
@@ -18,7 +18,7 @@ public class Controller {
     Array<Block> blocks;
     Array<Sign> signs;
     boolean isTouchAlarm = false;
-    static String msg = new String("Кликните на человека,\nчтобы узнать ин-фу о нём");
+    static String msg = new String("Кликните на человека,\nчтобы узнать всё о нём");
     public Controller(MyWorld world){
         this.world = world;
         mans = world.getMans();
@@ -39,7 +39,6 @@ public class Controller {
         }
         else {
             Array<Man> dead = new Array<Man>();
-            Array<Man> saved = new Array<Man>();
             for (Man man: mans) {
                 //Хотят ли узнать про него
                 updateManMsg(man);
@@ -51,14 +50,11 @@ public class Controller {
                     man.setKnow();
                 checkWithBlock(man);
                 checkWithSigns(man);
-                checkBoundsOfScreen(man);
                 if (man.isDead())
                     dead.add(man);
-                if(man.isSave())
-                    saved.add(man);
             }
             for (Man man: dead)
-                man.dead();
+                man.kill();
         }
 
         //Узнаем, как дела
@@ -76,42 +72,6 @@ public class Controller {
                 if(block.getTypeBlock() == TypeBlock.WINDOW && man.isKnow())
                     man.save();
             }
-
-            /*if (block.getTypePosition() == TypePosition.VERTICAL) {
-                //Если в следующий ход будет наложение, изменяем скорость
-                if ((Math.abs(man.getCenterPosition().x - block.getPosition().x) < man.getSize())) {
-                    if (block.getTypeBlock() == TypeBlock.EXIT) {
-                        Position()).nor());
-                        System.out.println("exit");
-                        break;
-                    }
-                    if (block.getTypeBlock() == TypeBlock.WALL) {
-                        man.setVelocity(man.getPosition().cpy().sub(new Vector2(block.getPosition().x, man.getPosition().y)).nor());
-                        System.out.println("ecnm " + man.getPosition());
-                    }man.setVelocity(block.getPosition().cpy().sub(man.get
-                    if (block.getTypeBlock() == TypeBlock.WINDOW) {
-                        System.out.println("window");
-                    }
-                }
-
-            }
-            if (block.getTypePosition() == TypePosition.HORIZONTAL){
-                if ((Math.abs(man.getCenterPosition().y - block.getPosition().y) < man.getSize())) {
-                    if (block.getTypeBlock() == TypeBlock.EXIT) {
-                        man.setVelocity(block.getCenterPosition().cpy().sub(man.getPosition()).nor());
-                        System.out.println("exit");
-                        break;
-                    }
-                    if (block.getTypeBlock() == TypeBlock.WALL) {
-                        man.setVelocity(man.getPosition().cpy().sub(new Vector2(man.getPosition().x, block.getPosition().y)).nor());
-                        System.out.println("ecnm " + man.getPosition());
-                    }
-                    if (block.getTypeBlock() == TypeBlock.WINDOW) {
-                        System.out.println("window");
-                    }
-                }
-
-            }*/
         }
     }
 
@@ -130,7 +90,8 @@ public class Controller {
                     man.setCountDeadFire();
                 }
                 //Нажимаем на кнопку, если возможно
-                if(sign.getType() == TypeSign.AlarmButton && !man.isKnow() && !sign.isUsed()) {
+                if(sign.getType() == TypeSign.AlarmButton  && !sign.isUsed()) {
+                    isTouchAlarm = true;
                     man.setKnow();
                     sign.setUsed();
                 }
@@ -138,15 +99,13 @@ public class Controller {
                     man.setHealth(sign.getType());
                 if(sign.getType() == TypeSign.ExitSign && man.isKnow() && man.getBounds().overlaps(sign.getFigure()))
                     man.save();
-
             }
-
             //Если находится в области видимости
             if(man.getCenterPosition().sub(sign.getPosition()).len() < man.getVision()){
                 //Если чел видит знак выхода и ещё не находится там
                 if(sign.getType() == TypeSign.ExitSign && man.isKnow() && !man.getBounds().overlaps(sign.getFigure()))
                     man.setVelocity(sign.getPosition().cpy().sub(man.getPosition()).nor());
-                //Если чел видит ононь, он узнал о пожаре
+                //Если чел видит огонь, он узнал о пожаре
                 if(sign.getType() == TypeSign.Fire)
                     man.setKnow();
             }
@@ -155,23 +114,28 @@ public class Controller {
     /*
     * Если чел вышел за экран, он спасся
     */
-    public void checkBoundsOfScreen(Man man){
+    public boolean checkBoundsOfScreen(Man man){
         if(man.getCenterPosition().x < 0
                 || man.getCenterPosition().y < 0
                 || man.getCenterPosition().x > MyWorld.WIDTH
                 || man.getCenterPosition().y > MyWorld.HEIGHT){
-            man.save();
+            return true;
         }
+        return false;
     }
 
     public void checkWorld(){
         int dead = 0, save =0;
+        Array<Man> needDelete = new Array<Man>();
         for(Man man:mans){
             if(man.getType() == TypeMan.DEAD)
                 dead++;
             if(man.getType() == TypeMan.SAVE)
                 save++;
+            if(checkBoundsOfScreen(man) && !man.isKnow())
+                needDelete.add(man);
         }
+        world.getMans().removeAll(needDelete, true);
         boolean haveFire = false, haveSmoke = false;
         for(Sign sign: signs){
             if(sign.getType() == TypeSign.Fire){

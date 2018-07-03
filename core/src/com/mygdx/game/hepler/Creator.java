@@ -1,18 +1,15 @@
-package com.mygdx.game;
+package com.mygdx.game.hepler;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.controller.Loader;
-import com.mygdx.game.model.MyWorld;
+import com.mygdx.game.model.world.MyWorld;
 import com.mygdx.game.model.blocks.Block;
 import com.mygdx.game.model.blocks.TypeBlock;
 import com.mygdx.game.model.blocks.TypePosition;
 import com.mygdx.game.model.signs.Sign;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.renderer.WorldRenderer;
-
-import java.util.Vector;
 
 
 public class Creator {
@@ -22,7 +19,7 @@ public class Creator {
     public Creator(MyWorld world){
         this.world = world;
         try {
-            Loader.load(world);
+            Loader.loadMap(world);
         }catch (Exception e) { }
         blocks = world.getBlocks();
         signs = world.getSigns();

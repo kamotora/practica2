@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.hepler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,20 +10,13 @@ public class InputHandler {
         return Gdx.input.justTouched();
     }
 
-    public static boolean isPressed() {
-        return Gdx.input.isTouched();
-    }
-
     public static Vector2 getMousePosition() {
         System.out.println(new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
         return new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
     }
 
     public static boolean keyEnter() {
-        return Gdx.input.isKeyPressed(Input.Keys.ENTER);
-    }
-    public static boolean keySpace() {
-        return Gdx.input.isKeyPressed(Input.Keys.SPACE);
+        return Gdx.input.isKeyJustPressed(Input.Keys.ENTER);
     }
     public static boolean key(int key) {
         return Gdx.input.isKeyPressed(key);

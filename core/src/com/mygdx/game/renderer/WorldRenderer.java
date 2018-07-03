@@ -5,10 +5,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.mygdx.game.InputHandler;
 import com.mygdx.game.controller.Controller;
 import com.mygdx.game.model.mans.Man;
-import com.mygdx.game.model.MyWorld;
+import com.mygdx.game.model.world.MyWorld;
 import com.mygdx.game.model.blocks.Block;
 import com.mygdx.game.model.signs.Sign;
 

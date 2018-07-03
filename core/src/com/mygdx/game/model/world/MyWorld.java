@@ -1,16 +1,12 @@
-package com.mygdx.game.model;
+package com.mygdx.game.model.world;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.Creator;
-import com.mygdx.game.InputHandler;
+import com.mygdx.game.hepler.InputHandler;
 import com.mygdx.game.controller.Controller;
 import com.mygdx.game.controller.FireController;
-import com.mygdx.game.controller.Loader;
+import com.mygdx.game.hepler.Loader;
 import com.mygdx.game.model.blocks.Block;
-import com.mygdx.game.model.blocks.TypeBlock;
-import com.mygdx.game.model.blocks.TypePosition;
 import com.mygdx.game.model.mans.Man;
 import com.mygdx.game.model.signs.Sign;
 import com.mygdx.game.model.signs.TypeSign;
@@ -42,12 +38,11 @@ public class MyWorld {
     int countSave = 0;
     public MyWorld(){
         controller = new Controller(this);
-        //read();
         /*
          * Загружаемся
          */
         try {
-            Loader.load(this);
+            Loader.loadMap(this);
         }
         catch (Exception e){
             System.out.println("load error");
@@ -57,31 +52,7 @@ public class MyWorld {
     /*
      * Создаём людей
      */
-    public void createMans(){
-        mans.add(new Man(new Vector2(550,600)));
-        mans.add(new Man(new Vector2(300,500)));
-        mans.add(new Man(new Vector2(400,400)));
-        mans.add(new Man(new Vector2(550,300)));
-        mans.add(new Man(new Vector2(400,200)));
-    }
-    //Добавляем обьекты
-    public void read(){
-        blocks.add(new Block(new Vector2(100,100),TypeBlock.WALL,TypePosition.HORIZONTAL,800));
-        blocks.add(new Block(new Vector2(900,100),TypeBlock.WINDOW,TypePosition.VERTICAL,100));
-        blocks.add(new Block(new Vector2(900,200),TypeBlock.WALL,TypePosition.VERTICAL,400));
-        blocks.add(new Block(new Vector2(600,600),TypeBlock.WALL,TypePosition.HORIZONTAL,300));
-        blocks.add(new Block(new Vector2(500,600),TypeBlock.EXIT,TypePosition.HORIZONTAL,100));
-        blocks.add(new Block(new Vector2(300,600),TypeBlock.WALL,TypePosition.HORIZONTAL,200));
-        blocks.add(new Block(new Vector2(200,600),TypeBlock.WINDOW,TypePosition.HORIZONTAL,100));
-        blocks.add(new Block(new Vector2(100,600),TypeBlock.WALL,TypePosition.HORIZONTAL,100));
-        blocks.add(new Block(new Vector2(100,100),TypeBlock.WALL,TypePosition.VERTICAL,500));
-        signs.add(new Sign(new Vector2(550,600),TypeSign.ExitSign));
-        signs.add(new Sign(new Vector2(200,200),TypeSign.AntiFire));
-        signs.add(new Sign(new Vector2(400,400),TypeSign.AntiFire));
-        signs.add(new Sign(new Vector2(600,200),TypeSign.AlarmButton));
-        createMans();
 
-    }
     public Array<Block> getBlocks() {
         return blocks;
     }
@@ -97,16 +68,25 @@ public class MyWorld {
      * Обновление поля
      */
     public void update() {
+        //Добавляем людей по нажатию Entera
+        if (InputHandler.keyEnter()) {
+            mans.add(new Man(new Vector2(230,900)));
+            countLive = mans.size;
+        }
         /*
-         * Пока людей нет, ждем нажатие Entera
+         * Пока людей нет, нечего обновлять
          */
         if (mans.size == 0) {
-            if (InputHandler.keyEnter()) {
-                createMans();
-                countLive = mans.size;
-            } else
-                return;
+            return;
         }
+        /*
+        if (InputHandler.key(Input.Keys.S))
+            try {
+                Loader.save(this);
+            }catch (Exception e){
+                System.out.println("kek");
+            }
+        */
         /*
          * Проверка всяких коллизий
          */
@@ -172,4 +152,6 @@ public class MyWorld {
         signs.clear();
         fireController = null;
     }
+
+
 }

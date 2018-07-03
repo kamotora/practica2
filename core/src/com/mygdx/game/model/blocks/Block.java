@@ -23,7 +23,6 @@ public class Block{
     Rectangle figure;
     public Block(Vector2 position, TypeBlock typeBlock, TypePosition typePosition, int length) {
         this.position = position;
-        position.y -= 50;
         this.typePosition = typePosition;
         this.typeBlock = typeBlock;
         //толщина
@@ -47,22 +46,6 @@ public class Block{
             height = length;
         }
         figure = new Rectangle(position.x,position.y,widht,height);
-    }
-
-    public Vector2 getPosition() {
-        return position;
-    }
-
-    public Rectangle getFigure() {
-        return figure;
-    }
-
-    public TypeBlock getTypeBlock() {
-        return typeBlock;
-    }
-
-    public TypePosition getTypePosition() {
-        return typePosition;
     }
 
     /*
@@ -114,4 +97,21 @@ public class Block{
         }
         return null;
     }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public Rectangle getFigure() {
+        return figure;
+    }
+
+    public TypeBlock getTypeBlock() {
+        return typeBlock;
+    }
+
+    public TypePosition getTypePosition() {
+        return typePosition;
+    }
+
 }
