@@ -2,7 +2,6 @@ package com.mygdx.game.model.blocks;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 
 import java.io.Serializable;
@@ -15,7 +14,7 @@ public class Block{
     int height;
     //тип блока
     TypeBlock typeBlock;
-    //тип расположение блока
+    //тип расположения блока
     TypePosition typePosition;
     //цвет
     Color color;

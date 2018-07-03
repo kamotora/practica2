@@ -18,11 +18,6 @@ public class WorldRenderer {
     private static ShapeRenderer renderer = new ShapeRenderer();
     private static SpriteBatch spriteBatch = new SpriteBatch();
     private static BitmapFont bitmapFont = new BitmapFont(Gdx.files.internal("font.fnt"), Gdx.files.internal("font.png"),false);
-    //установка камеры
-    public void SetCamera(float x, float y){
-        this.cam.position.set(x, y,0);
-        this.cam.update();
-    }
 
     public WorldRenderer(MyWorld world) {
         this.world = world;
@@ -30,16 +25,15 @@ public class WorldRenderer {
 
     //основной метод, здесь мы отрисовываем все объекты мира
     public void render() {
-        //world.update();
         drawBlocks();
         spriteBatch.begin();
         drawSigns();
         drawMans();
-        updateLabels();
+        drawLabels();
         spriteBatch.end();
     }
 
-    private void updateLabels() {
+    private void drawLabels() {
         bitmapFont.draw(spriteBatch,"Живых людей: "+world.getCountLive(), 1000,700);
         bitmapFont.draw(spriteBatch,"Мертвых людей: "+world.getCountDead(), 1000,650);
         bitmapFont.draw(spriteBatch,"Людей спаслось: "+world.getCountSave(), 1000,600);

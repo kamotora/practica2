@@ -24,7 +24,6 @@ public class FireController {
     }
     //распространение огня
 
-    //Нужно сделать: если есть потушенные огоньки, распростанение уменьшается
     public void spreadFire(){
         if(System.currentTimeMillis() - times < DELAY)
             return;

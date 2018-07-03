@@ -57,9 +57,7 @@ public class MyWorld {
         return blocks;
     }
 
-    public Array<Man> getMans() {
-        return mans;
-    }
+    public Array<Man> getMans() { return mans; }
 
     public Array<Sign> getSigns() {
         return signs;

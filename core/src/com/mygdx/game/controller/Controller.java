@@ -32,6 +32,7 @@ public class Controller {
         if(world.getTypeWorld() != TypeWorld.FIRE) {
             for (Man man: mans){
                 checkWithBlock(man);
+                checkWithOtherMans(man);
                 //Хотят ли узнать про него
                 updateManMsg(man);
             }
@@ -52,6 +53,7 @@ public class Controller {
                 checkWithSigns(man);
                 if (man.isDead())
                     dead.add(man);
+                checkWithOtherMans(man);
             }
             for (Man man: dead)
                 man.kill();
@@ -76,15 +78,20 @@ public class Controller {
     }
 
     /*
-    * Подкорректировать дальность огня
+    * Обработка событий с знаками
     */
     public void checkWithSigns(Man man){
         for(Sign sign : signs){
+            //Если огонь или дым близко, он уменьшает здоровье
+            if ((sign.getType() == TypeSign.Fire || sign.getType() == TypeSign.Smoke) && man.getBounds().overlaps(sign.getFigure()))
+                man.setHealth(sign.getType());
             if(man.getCenterPosition().sub(sign.getPosition()).len() < Man.getSize()*2){
+                //Берем огнетушитель
                 if (sign.getType() == TypeSign.AntiFire && !sign.isUsed() && man.isKnow()) {
                     man.setAntiFire();
                     sign.setUsed();
                 }
+                //Тушим
                 if(sign.getType() == TypeSign.Fire && man.isAntiFire()) {
                     sign.setUsed();
                     man.setCountDeadFire();
@@ -95,14 +102,13 @@ public class Controller {
                     man.setKnow();
                     sign.setUsed();
                 }
-                if (sign.getType() == TypeSign.Fire || sign.getType() == TypeSign.Smoke)
-                    man.setHealth(sign.getType());
+                //Спасаемся
                 if(sign.getType() == TypeSign.ExitSign && man.isKnow() && man.getBounds().overlaps(sign.getFigure()))
                     man.save();
             }
             //Если находится в области видимости
             if(man.getCenterPosition().sub(sign.getPosition()).len() < man.getVision()){
-                //Если чел видит знак выхода и ещё не находится там
+                //Если чел видит знак выхода и ещё не находится там, направляем его
                 if(sign.getType() == TypeSign.ExitSign && man.isKnow() && !man.getBounds().overlaps(sign.getFigure()))
                     man.setVelocity(sign.getPosition().cpy().sub(man.getPosition()).nor());
                 //Если чел видит огонь, он узнал о пожаре
@@ -111,9 +117,19 @@ public class Controller {
             }
         }
     }
-    /*
-    * Если чел вышел за экран, он спасся
-    */
+    public void checkWithOtherMans(Man man){
+        Array.ArrayIterator<Man> iterator = new Array.ArrayIterator<Man>(mans);
+        for(Man man2 = iterator.next();iterator.hasNext();man2 = iterator.next()){
+            if(man == man2)
+                continue;
+            if(man.getBounds().overlaps(man2.getBounds())){
+                man2.setVelocity(man2.getPosition().cpy().sub(man.getPosition()).nor());
+                man.setVelocity(man.getPosition().cpy().sub(man2.getPosition()).nor());
+            }
+        }
+    }
+
+
     public boolean checkBoundsOfScreen(Man man){
         if(man.getCenterPosition().x < 0
                 || man.getCenterPosition().y < 0
@@ -186,7 +202,6 @@ public class Controller {
          */
         if(haveFire){
             world.setTypeWorld(TypeWorld.FIRE);
-            return;
         }
 
     }

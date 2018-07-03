@@ -16,7 +16,7 @@ import java.util.Random;
 public class Man {
     private final static int SIZE_ON_MAP = 32;
     private final static int MIN_SPEED = 2;
-    private final static int MIN_VISION = 120;
+    private final static int MIN_VISION = 100;
 
     /*
      * Место на карте
@@ -37,7 +37,7 @@ public class Man {
     /*
      * Радиус видимости
      */
-    private int vision = MIN_VISION;
+    private int vision;
     /*
      * Есть огнетушитель
      */
@@ -57,7 +57,7 @@ public class Man {
     /*
      * Скорость
      */
-    private static int speed = MIN_SPEED;
+    private float speed;
     /*
      * Границы
      */
@@ -74,7 +74,10 @@ public class Man {
         this.position = position;
         bounds = new Rectangle(position.x, position.y,SIZE_ON_MAP,SIZE_ON_MAP);
         type = TypeMan.LIVE;
-        velocity.set(rand.nextFloat() % 1 - 0.5f, -1);
+        velocity.set(rand.nextFloat() % 2 - 1, -1);
+        //Разброс от min_vision  на 25 в обе стороны
+        vision = MIN_VISION + rand.nextInt(50) - 25;
+        speed = MIN_SPEED + rand.nextFloat() % 3 - 1;
     }
 
     public Vector2 getPosition() {
@@ -144,10 +147,10 @@ public class Man {
         */
         //Работает, но не совсем правильно
         if (block.getTypePosition() == TypePosition.VERTICAL) {
-            velocity = getPosition().cpy().sub(new Vector2(block.getPosition().x, getPosition().y+ rand.nextInt(20))).nor();
+            velocity = getPosition().cpy().sub(new Vector2(block.getPosition().x, getPosition().y + rand.nextInt(30) -15)).nor();
         }
         else
-            velocity = getPosition().cpy().sub(new Vector2(getPosition().x + rand.nextInt(20), block.getPosition().y)).nor();
+            velocity = getPosition().cpy().sub(new Vector2(getPosition().x + rand.nextInt(30) - 15, block.getPosition().y)).nor();
     }
 
     /*
@@ -160,6 +163,9 @@ public class Man {
             health -= 0.05;
         if(health <= 0)
             type = TypeMan.DEAD;
+        //Каждые 10% здоровья уменьшаем скорость
+        if(health % 10 == 0)
+            speed -= 0.1;
     }
 
     //Если умерли
@@ -276,6 +282,8 @@ public class Man {
 
     public StringBuilder toStringBuilder(){
         return  new StringBuilder("Уровень здоровья = " + health)
+                .append("\nСкорость = ")
+                .append(String.format("%(.2f", speed))
                 .append("\nОбласть видимости = ")
                 .append(vision)
                 .append("\nОгнетушитель: ")
