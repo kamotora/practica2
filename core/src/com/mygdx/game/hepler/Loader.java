@@ -1,5 +1,6 @@
 package com.mygdx.game.hepler;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.game.model.world.MyWorld;
 import com.mygdx.game.model.blocks.Block;
 import com.mygdx.game.model.mans.Man;
@@ -11,7 +12,7 @@ import java.io.FileWriter;
 import java.util.Scanner;
 
 public class Loader {
-    final static String PATH  = System.getProperty("user.dir") + "\\core\\assets\\config.conf";
+    final static String PATH  = Gdx.files.internal("config.conf").toString();
 
     public static void loadMap(MyWorld world) throws Exception{
         FileReader reader = new FileReader(new File(PATH));

@@ -118,7 +118,7 @@ public class Controller {
         }
     }
     public void checkWithOtherMans(Man man){
-        Array.ArrayIterator<Man> iterator = new Array.ArrayIterator<Man>(mans);
+        Array.ArrayIterator<Man> iterator = new Array.ArrayIterator<>(mans);
         for(Man man2 = iterator.next();iterator.hasNext();man2 = iterator.next()){
             if(man == man2)
                 continue;
@@ -172,7 +172,7 @@ public class Controller {
          * Все спаслись
          */
         if(save == mans.size ){
-            world.setTypeWorld(TypeWorld.WIN);
+            world.setTypeWorld(TypeWorld.ALLSAVE);
             return;
         }
         /*

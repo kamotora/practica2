@@ -34,6 +34,7 @@ public class WorldRenderer {
     }
 
     private void drawLabels() {
+        bitmapFont.draw(spriteBatch,"ЛКМ - устроить пожар,\nENTER - добавить человека", 1000,900);
         bitmapFont.draw(spriteBatch,"Живых людей: "+world.getCountLive(), 1000,700);
         bitmapFont.draw(spriteBatch,"Мертвых людей: "+world.getCountDead(), 1000,650);
         bitmapFont.draw(spriteBatch,"Людей спаслось: "+world.getCountSave(), 1000,600);
